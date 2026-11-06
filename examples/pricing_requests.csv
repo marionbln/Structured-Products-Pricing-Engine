@@ -1,0 +1,7 @@
+id,produit,maturite_ans,vol,barriere,prix_cible,nb_sous_jacents,correlation
+REQ-001,BRC,1,0.25,0.65,98,1,
+REQ-002,BRC,1,0.25,0.75,98,1,
+REQ-003,AUTOCALL,2,0.25,0.60,98,1,
+REQ-004,AUTOCALL,2,0.35,0.60,98,1,
+REQ-005,WORST_OF_AUTOCALL,2,0.25,0.60,98,3,0.6
+REQ-006,WORST_OF_AUTOCALL,2,0.25,0.60,98,3,0.3
