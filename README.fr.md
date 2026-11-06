@@ -1,4 +1,4 @@
-# FX Derivatives Pricing & Hedging Engine
+# Structured Products Pricing Engine
 
 Projet Python de pricing et de gestion du risque sur options de change (FX).
 Le but : partir d'un pricer simple et construire un outil complet qui calcule
@@ -45,6 +45,11 @@ capital, et résout le coupon "fair" qui ramène le produit à un prix cible
 (ex. 98% = 100% moins la marge de l'émetteur), comme le fait un structureur.
 Delta et vega par bump-and-reprice.
 
+**Worst-of, backtest et pricing en lot.** Autocall sur un panier de
+sous-jacents corrélés (le produit suit le plus mauvais), backtest d'un
+autocall lancé chaque mois sur le S&P 500 depuis 1990 (données réelles), et
+traitement automatique d'un fichier de demandes de prix de la vente.
+
 ## Structure
 
 ```
@@ -57,6 +62,9 @@ src/
     sensitivity.py           graphiques de sensibilité
     vol_smile.py             smile de volatilité
     structured_products.py  BRC, autocall, coupon fair, Greeks
+    worst_of.py             autocall worst-of sur panier corrélé
+    backtest.py             backtest historique d'autocall
+    pricing_requests.py     pricing en lot de demandes de prix
 
 examples/                  un script par partie, qui génère les graphiques
 outputs/                   les graphiques générés
@@ -82,11 +90,12 @@ obtenu par la formule, et les options à barrière doivent se recomposer
 correctement pour redonner une option classique. Pour les produits
 structurés, la BRC doit se répliquer exactement en obligation + coupons -
 put down-and-in, et le coupon fair doit bien ramener le prix à la cible.
-Les 11 tests passent.
+Les 16 tests passent.
 
 ```
 python tests/test_pricing.py
 python tests/test_structured_products.py
+python tests/test_extensions.py
 ```
 
 ## Limites
