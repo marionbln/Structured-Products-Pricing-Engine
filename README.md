@@ -104,3 +104,26 @@ Each script in `examples/` reproduces one chart in `outputs/`.
 ## Tools
 
 Python, NumPy, SciPy, Pandas, Matplotlib.
+
+## Dynamic strategies (rule-based indices / Delta One)
+
+`src/dynamic_strategies.py` backtests rule-based strategies of the kind wrapped in Delta One certificates or AMCs. Each month a rule sets the exposure to the index, and the rest earns cash.
+
+- **Rules:** buy & hold, **volatility target** (exposure = target vol / realised 12-month vol, capped at 150 %), **trend filter** (invested when the index is above its 10-month moving average).
+- **Engine:** monthly rebalancing with no look-ahead (the weight decided at *t* applies to *t+1*). The cost is charged on the notional traded after market drift, and leverage is financed at the cash rate.
+- **Statistics:** CAGR, volatility, Sharpe, max drawdown, Calmar, worst month, average exposure, turnover, calendar returns.
+- **Automatic client report:** `generate_report()` writes a factsheet (NAV, drawdown and exposure chart) and a Markdown report with the key figures.
+
+```bash
+python examples/09_dynamic_strategies_report.py   # -> reports/dynamic_strategies/
+```
+
+S&P 500 data, Jan 1991 to Sep 2026, cash at 2 %, 5 bp of costs:
+
+| Strategy | CAGR | Volatility | Sharpe | Max drawdown | Turnover / year |
+|---|---|---|---|---|---|
+| Buy & hold | 9.3% | 12.2% | 0.63 | -50.8% | 0% |
+| Vol target 10% | 8.3% | 11.8% | 0.57 | -38.2% | 72% |
+| Trend 10m SMA | 10.1% | 8.7% | 0.92 | -19.1% | 115% |
+
+The trend filter more than halves the maximum drawdown. Volatility targeting reduces it less on monthly data: it was leveraged (about 120 %) just before the March 2020 drop, hence a worst month of -23.6 %. Limits: the price index excludes dividends, the cash rate is flat, and the data is monthly. Seven unit tests check that there is no look-ahead, the cash return, the effect of costs, exposure scaling and drawdowns.
